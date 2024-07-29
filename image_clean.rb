@@ -2,14 +2,18 @@ require 'rmagick'
 include Magick
 require 'mini_magick'
 
-image = Magick::Image.read('cleaned_images/images.png').first
-image = Image.new(image.columns, image.rows)
-image.format = 'PNG'
-image.fuzz = '10%'
-background_color = image.background_color
-image.paint_transparent(background_color)
-image.background_color = 'white'
-image.write('cleaned_images/images2.png')
+#image = Magick::Image.read('cleaned_images/images.png').first
+#image.clone.negate
+#image = Image.new(image.columns, image.rows)
+#image.fuzz = '20%'
+#background_color = image.background_color
+#image.paint_transparent(background_color)
+#image.alpha(Magick::ActivateAlphaChannel)
+#image.background_color = 'white'
+#image.matte_reset!
+#image.composite!(image, 1, 1, OverCompositeOp)
+#image = image.composite(image, NorthWestGravity, 0, 0, OverCompositeOp)
+#image.write('cleaned_images/images2.png')
 
 # input_path = 'images/images.png'
 # output_path = 'images/images_c.png'
@@ -64,9 +68,9 @@ image.write('cleaned_images/images2.png')
 #   composite << "cleaned_images/mm3_images.png"
 # end
 
-# MiniMagick.mogrify do |mogrify|
-#   mogrify.merge! ["-bordercolor", "white", "-border", "1x1", "-matte", "-fill", "none", "-fuzz", "20%", "-draw", "matte 1,1 floodfill", "-shave", "1x1", "-background", "white", "-flatten"]
-#   mogrify << "cleaned_images/*"
-# end
+MiniMagick.mogrify do |mogrify|
+  mogrify.merge! ["-bordercolor", "white", "-border", "1x1", "-matte", "-fill", "none", "-fuzz", "20%", "-draw", "matte 1,1 floodfill", "-shave", "1x1", "-background", "white", "-flatten"]
+  mogrify << "cleaned_images/*"
+end
 
 
