@@ -1,22 +1,12 @@
- composite  -compose Dst_Over -tile pattern:checkerboard images.png images_c.png
- convert -fuzz .2% -transparent white white_floodfill.png white_floodfill_check2.png
- convert -fuzz 10% -transparent white white_floodfill.png test.png
- 
- convert white_floodfill.png -background white -flatten white_floodfill_check2.png
- 
-
- 
-# doesnt work
-convert -fuzz .2% -transparent white images.png images_c.png
-composite  -compose Dst_Over -tile pattern:checkerboard images.png images_c.png
-
-# doesnt work
-convert -fuzz 10% -transparent white images.png images_c.png
-composite  -compose Dst_Over -tile pattern:checkerboard images.png images_c.png
+convert white_floodfill.png -background white -flatten white_floodfill_check2.png 
 
 # works okay
 convert images.png -bordercolor white -border 1x1 -matte -fill none -fuzz 20% -draw 'matte 1,1 floodfill' -shave 1x1 white_floodfill.png
 composite  -compose Dst_Over -tile pattern:checkerboard white_floodfill.png white_floodfill_check.png
+
+# remove shadows
+convert s-l1600.jpg -alpha set -bordercolor white -border 1 -fill none -fuzz 3% -draw "color 0,0 floodfill" s-l1600_2.jpg
+convert white_floodfill.png \( +clone -alpha extract -threshold 50% -blur 0x4 -level 75x100% \) -alpha off -compose copy_opacity -composite white_floodfill2.png
 
 # start real
 convert images.png \( +clone -fx 'p{0,0}' \)  -compose Difference  -composite   -modulate 100,0  +matte  difference.png
@@ -35,8 +25,7 @@ convert matte.png -negate -blur 0x1 matte-negated.png
 composite -compose CopyOpacity matte-negated.png images.png finished.png
 composite  -compose Dst_Over -tile pattern:checkerboard finished.png finished_check.png
 
-# remove shadows
-convert input.jpg -alpha set -bordercolor white -border 1 -fill none -fuzz 3% -draw "color 0,0 floodfill" output.png
+
 
 convert input.jpg \( -clone 0 -blur 0x5 \) +swap -compose divide -composite output.png
 
